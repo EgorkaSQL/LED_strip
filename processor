@@ -1,0 +1,141 @@
+#include "BluetoothSerial.h"
+
+#define LED_BUILTIN 2
+#define LED_STRIP_PIN 14
+
+BluetoothSerial SerialBT;
+
+bool blinkEnabled = false;
+bool stripBlinkEnabled = false;
+
+int brightness = 128;
+int fadeAmount = 5;
+bool fading = false;
+
+void increaseBrightness() 
+{
+  int increase = brightness * 0.30;
+  if (brightness + increase <= 255) 
+  {
+    brightness += increase;
+  } 
+  else 
+  {
+    brightness = 255;
+  }
+  SerialBT.println("Яркость увеличена на 30%");
+}
+
+// Функция для уменьшения яркости на 30% от текущего значения
+void decreaseBrightness() 
+{
+  int decrease = brightness * 0.30;
+  if (brightness - decrease >= 0) 
+  {
+    brightness -= decrease;
+  } 
+  else 
+  {
+    brightness = 0;
+  }
+  SerialBT.println("Яркость уменьшена на 30%");
+}
+
+void setup() 
+{
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_STRIP_PIN, OUTPUT);
+  Serial.begin(921600);
+  SerialBT.begin("ESP32_Bluetooth");
+  Serial.println("ESP32 запущен!");
+}
+
+void loop() 
+{
+  // Чтение команд из Bluetooth
+  if (SerialBT.available()) 
+  {
+    char command = SerialBT.read();
+    Serial.print("Получено: ");
+    Serial.println(command);
+
+    // Управление миганием встроенного светодиода
+    if (command == '1') 
+    {
+      blinkEnabled = true;
+      SerialBT.println("Мигание встроенного светодиода ВКЛЮЧЕНО");
+    } 
+    else if (command == '0') 
+    {
+      blinkEnabled = false;
+      SerialBT.println("Мигание встроенного светодиода ВЫКЛЮЧЕНО");
+    }
+
+    // Управление миганием светодиодной ленты
+    else if (command == '2') 
+    {
+      stripBlinkEnabled = true;
+      SerialBT.println("Мигание ленты ВКЛЮЧЕНО");
+    } 
+    else if (command == '3') 
+    {
+      stripBlinkEnabled = false;
+      SerialBT.println("Мигание ленты ВЫКЛЮЧЕНО");
+    }
+
+    // Управление плавным изменением яркости
+    else if (command == '4') 
+    {
+      fading = true;
+      SerialBT.println("Плавное изменение яркости ленты ВКЛЮЧЕНО");
+    } 
+    else if (command == '5') 
+    {
+      fading = false;
+      SerialBT.println("Плавное изменение яркости ленты ВЫКЛЮЧЕНО");
+    }
+
+    // Управление повышением яркости
+    else if (command == '6') 
+    {
+      increaseBrightness();
+    }
+
+    // Управление уменьшением яркости
+    else if (command == '7') 
+    {
+      decreaseBrightness();
+    }
+  }
+
+  // Мигание встроенного светодиода
+  if (blinkEnabled) 
+  {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(500);
+  }
+
+  // Мигание светодиодной ленты
+  if (stripBlinkEnabled) 
+  {
+    digitalWrite(LED_STRIP_PIN, HIGH);
+    delay(500);
+    digitalWrite(LED_STRIP_PIN, LOW);
+    delay(500);
+  }
+
+  // Плавное изменение яркости светодиодной ленты
+  if (fading) 
+  {
+    analogWrite(LED_STRIP_PIN, brightness);
+    brightness = brightness + fadeAmount;
+    if (brightness <= 0 || brightness >= 255) 
+    {
+      fadeAmount = -fadeAmount;
+    }
+
+    delay(30);
+  }
+}
