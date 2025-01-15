@@ -117,9 +117,6 @@ public class MainActivity extends AppCompatActivity
 
         Button btnMenu = findViewById(R.id.btnDummy1);
         btnMenu.setOnClickListener(v -> showMenuDialog());
-
-        btnDummy2 = findViewById(R.id.btnDummy2);
-        btnDummy2.setOnClickListener(v -> toggleStripBlink());
     }
 
     private void checkLocationPermission()
@@ -173,35 +170,6 @@ public class MainActivity extends AppCompatActivity
         {
             Toast.makeText(this, "Не удалось подключиться к устройству", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-        }
-    }
-
-    private void toggleStripBlink()
-    {
-        if (mOutputStream != null)
-        {
-            try
-            {
-                if (stripBlinkState)
-                {
-                    mOutputStream.write('3');
-                    btnDummy2.setText("Пустышка 2 (Включить ленту)");
-                }
-                else
-                {
-                    mOutputStream.write('2');
-                    btnDummy2.setText("Пустышка 2 (Выключить ленту)");
-                }
-                stripBlinkState = !stripBlinkState;
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
         }
     }
 
