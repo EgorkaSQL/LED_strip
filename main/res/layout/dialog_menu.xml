@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,17 +5,33 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_dialog">
 
+    <!-- Центрированная кнопка -->
+    <Button
+        android:id="@+id/topButton"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:background="@drawable/back"
+        android:contentDescription="Закрыть меню"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Слайдер яркости -->
     <SeekBar
         android:id="@+id/brightnessSlider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:max="100"
-        android:progress="50"
-        app:layout_constraintTop_toTopOf="parent"
+        android:progress="100"
+        android:thumbTint="@color/seekbar_thumb"
+        android:progressTint="@color/seekbar_progress"
+        android:progressBackgroundTint="@color/seekbar_background"
+        app:layout_constraintTop_toBottomOf="@id/topButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Панель кнопок -->
     <GridLayout
         android:id="@+id/buttonPanel"
         android:layout_width="wrap_content"
@@ -33,51 +48,53 @@
             android:layout_width="150dp"
             android:layout_height="80dp"
             android:layout_margin="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="Button 1"
-            android:background="@drawable/rounded_button"/>
+            android:background="@drawable/btn_toggle_selector"
+            android:fontFamily="sans-serif"
+            android:text="Blink"
+            android:textColor="#FFFFFF" />
         <Button
             android:id="@+id/button2"
             android:layout_width="150dp"
             android:layout_height="80dp"
             android:layout_margin="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="Button 2"
-            android:background="@drawable/rounded_button"/>
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Fade"
+            android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button3"
             android:layout_width="150dp"
             android:layout_height="80dp"
             android:layout_margin="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="Button 3"
-            android:background="@drawable/rounded_button"/>
+            android:text="Simple"
+            android:background="@drawable/btn_toggle_selector"
+            android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button4"
             android:layout_width="150dp"
             android:layout_height="80dp"
             android:layout_margin="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="Button 4"
-            android:background="@drawable/rounded_button"/>
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Night light"
+            android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button5"
             android:layout_width="150dp"
             android:layout_height="80dp"
             android:layout_margin="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="Button 5"
-            android:background="@drawable/rounded_button"/>
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Romantic"
+            android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button6"
             android:layout_width="150dp"
             android:layout_height="80dp"
             android:layout_margin="8dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="Button 6"
-            android:background="@drawable/rounded_button"/>
+            android:background="@drawable/btn_toggle_selector"
+            android:text="None"
+            android:textColor="#FFFFFF"/>
     </GridLayout>
 
+    <!-- Круглый цветовой выбор -->
     <com.example.projectiapi.ColorPickerView
         android:id="@+id/colorPickerCircle"
         android:layout_width="300dp"
@@ -87,10 +104,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Индикатор цвета -->
     <View
         android:id="@+id/colorIndicator"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/indicator_circle"
         app:layout_constraintTop_toBottomOf="@id/colorPickerCircle"

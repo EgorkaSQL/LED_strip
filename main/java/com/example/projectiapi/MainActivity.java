@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import android.animation.ObjectAnimator;
@@ -34,14 +36,14 @@ public class MainActivity extends AppCompatActivity
     private BluetoothSocket mSocket;
     private OutputStream mOutputStream;
     private BluetoothDevice mDevice;
-    private Button btnToggleLED;
+    private ImageButton btnToggleLED;
     private Button btnConnect;
-    private Button btnDummy1;
     private boolean ledState = false;
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private Button btnDummy2;
-    private boolean stripBlinkState = false;
+    private boolean stripBlinkState = true;
+    private boolean fadeEffectState = true;
+    private Button activeButton = null;
 
     private final ActivityResultLauncher<String[]> permissionsLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            Toast.makeText(this, "Для работы с Bluetooth требуется разрешение на фоновое местоположение.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Требуется разрешение на фоновое местоположение.", Toast.LENGTH_SHORT).show();
         }
     });
 
@@ -117,6 +119,32 @@ public class MainActivity extends AppCompatActivity
 
         Button btnMenu = findViewById(R.id.btnDummy1);
         btnMenu.setOnClickListener(v -> showMenuDialog());
+
+        animateButtonsIn();
+    }
+
+    private void animateButtonsIn()
+    {
+        LinearLayout buttonLayout = findViewById(R.id.buttonLayout);
+        int buttonCount = buttonLayout.getChildCount();
+
+        for (int i = 0; i < buttonCount; i++)
+        {
+            View button = buttonLayout.getChildAt(i);
+            button.setTranslationY(500);
+            button.setAlpha(0f);
+
+            ObjectAnimator animator = ObjectAnimator.ofFloat(button, "translationY", 500, 0);
+            animator.setDuration(800);
+            animator.setStartDelay(i * 200);
+
+            ObjectAnimator fadeIn = ObjectAnimator.ofFloat(button, "alpha", 0f, 1f);
+            fadeIn.setDuration(800);
+            fadeIn.setStartDelay(i * 200);
+
+            animator.start();
+            fadeIn.start();
+        }
     }
 
     private void checkLocationPermission()
@@ -149,7 +177,7 @@ public class MainActivity extends AppCompatActivity
 
     private void connectToBluetoothDevice()
     {
-        String deviceAddress = "AC:15:18:E9:F9:56";
+        String deviceAddress = "C0:5D:89:DC:BC:06";
         mDevice = mBluetoothAdapter.getRemoteDevice(deviceAddress);
 
         try
@@ -173,25 +201,40 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void toggleLED()
+    private void toggleLED() {
+        ImageButton btnToggleLED = findViewById(R.id.btnToggleLED);
+
+        if (mOutputStream != null) {
+            if (ledState) {
+                fadeInLightEffect();
+                btnToggleLED.setImageResource(R.drawable.ic_led_off);
+            } else {
+                fadeOutLightEffect();
+                btnToggleLED.setImageResource(R.drawable.ic_led_on);
+            }
+            ledState = !ledState;
+        } else {
+            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void toggleStripBlink()
     {
         if (mOutputStream != null)
         {
             try
             {
-                if (ledState)
+                if (stripBlinkState)
                 {
-                    mOutputStream.write('0');
-                    btnToggleLED.setText("Включить светодиод");
-                    fadeInLightEffect();
+                    mOutputStream.write('3');
+                    Toast.makeText(this, "Включено мигание", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    mOutputStream.write('1');
-                    btnToggleLED.setText("Выключить светодиод");
-                    fadeOutLightEffect();
+                    mOutputStream.write('4');
+                    Toast.makeText(this, "Выключено мигание", Toast.LENGTH_SHORT).show();
                 }
-                ledState = !ledState;
+                stripBlinkState = !stripBlinkState;
             }
             catch (IOException e)
             {
@@ -200,6 +243,25 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
+            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void toggleFadeEffect() {
+        if (mOutputStream != null) {
+            try {
+                if (fadeEffectState) {
+                    mOutputStream.write('5');
+                    Toast.makeText(this, "Эффект затухания включён", Toast.LENGTH_SHORT).show();
+                } else {
+                    mOutputStream.write('6');
+                    Toast.makeText(this, "Эффект затухания выключен", Toast.LENGTH_SHORT).show();
+                }
+                fadeEffectState = !fadeEffectState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
             Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
         }
     }
@@ -225,7 +287,18 @@ public class MainActivity extends AppCompatActivity
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(R.layout.dialog_menu);
         bottomSheetDialog.setCancelable(true);
-        bottomSheetDialog.setCanceledOnTouchOutside(true);
+        bottomSheetDialog.setCanceledOnTouchOutside(false);
+        Button btnCloseMenu = bottomSheetDialog.findViewById(R.id.topButton);
+
+        if (btnCloseMenu != null)
+        {
+            btnCloseMenu.setOnClickListener(v -> {
+                if (bottomSheetDialog.isShowing())
+                {
+                    bottomSheetDialog.dismiss();
+                }
+            });
+        }
 
         BottomSheetBehavior<?> behavior = bottomSheetDialog.getBehavior();
         behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
@@ -240,9 +313,9 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            }
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {}
         });
+
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         final View colorPicker = bottomSheetDialog.findViewById(R.id.colorPickerCircle);
@@ -252,7 +325,8 @@ public class MainActivity extends AppCompatActivity
         colorPicker.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
         {
             @Override
-            public void onGlobalLayout() {
+            public void onGlobalLayout()
+            {
                 colorPicker.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 int pickerWidth = colorPicker.getWidth();
@@ -265,11 +339,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // Обработчик касания для перемещения точки за пальчиком
         colorPicker.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
                 float touchX = event.getX();
                 float touchY = event.getY();
                 int pickerWidth = colorPicker.getWidth();
@@ -307,10 +381,56 @@ public class MainActivity extends AppCompatActivity
             Button button = bottomSheetDialog.findViewById(buttonIds[i]);
             if (button != null)
             {
-                final int index = i;
-                button.setOnClickListener(v ->
-                        Toast.makeText(bottomSheetDialog.getContext(), "Нажата кнопка: " + (index + 1), Toast.LENGTH_SHORT).show()
-                );
+                final int buttonId = buttonIds[i];
+
+                button.setOnClickListener(v -> {
+                    if (activeButton != null && activeButton != button)
+                    {
+                        Toast.makeText(bottomSheetDialog.getContext(), "Сначала отключите активную кнопку!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    boolean isActivated = button.isSelected();
+                    button.setSelected(!isActivated);
+
+                    if (!isActivated)
+                    {
+                        activeButton = button;
+
+                        if (buttonId == R.id.button1)
+                        {
+                            stripBlinkState = true;
+                            toggleStripBlink();
+                            Toast.makeText(bottomSheetDialog.getContext(), "Мигание включено", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (buttonId == R.id.button2)
+                        {
+                            fadeEffectState = true;
+                            toggleFadeEffect();
+                            Toast.makeText(bottomSheetDialog.getContext(), "Fade-эффект включен", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(bottomSheetDialog.getContext(), "Нажата кнопка с ID: " + buttonId, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        activeButton = null;
+
+                        if (buttonId == R.id.button1)
+                        {
+                            stripBlinkState = false;
+                            toggleStripBlink();
+                            Toast.makeText(bottomSheetDialog.getContext(), "Мигание выключено", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (buttonId == R.id.button2)
+                        {
+                            fadeEffectState = false;
+                            toggleFadeEffect();
+                            Toast.makeText(bottomSheetDialog.getContext(), "Fade-эффект выключен", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         }
 

@@ -3,4 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="status_bar_color">#212020</color>
+    <color name="seekbar_thumb">#1F81DC</color>
+    <color name="seekbar_progress">#2D2DFF</color>
+    <color name="seekbar_background">#BDBDBD</color>
 </resources>
