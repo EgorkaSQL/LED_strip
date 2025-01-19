@@ -11,13 +11,16 @@ BluetoothSerial SerialBT;
 bool blinkEnabled = false;
 bool fadeEnabled = false;
 bool phonkEnabled = false;
+bool sosEnabled = false;
 
 unsigned long previousMillis = 0;
 const unsigned long blinkInterval = 200;
 const unsigned long longBlinkInterval = 500;
+const unsigned long sosPauseInterval = 3000;
 bool ledState = false;
 
 int phonkStep = 0;
+int sosStep = 0;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -43,6 +46,7 @@ void loop() {
     if (command == '3') {
       blinkEnabled = true;
       fadeEnabled = false;
+      sosEnabled = false;
       Serial.println("Мигание включено");
     } else if (command == '4') {
       blinkEnabled = false;
@@ -51,6 +55,7 @@ void loop() {
     } else if (command == '5') {
       fadeEnabled = true;
       blinkEnabled = false;
+      sosEnabled = false;
       Serial.println("Затухание включено");
     } else if (command == '6') {
       fadeEnabled = false;
@@ -58,6 +63,7 @@ void loop() {
       Serial.println("Затухание выключено");
     } else if (command == '7') {
       phonkEnabled = true;
+      sosEnabled = false;
       blinkEnabled = false;
       fadeEnabled = false;
       phonkStep = 0;
@@ -68,6 +74,19 @@ void loop() {
       phonkEnabled = false;
       ledcWrite(LED_CHANNEL, 0);
       Serial.println("Фонк выключено");
+    } else if (command == '9') {
+      sosEnabled = true;
+      blinkEnabled = false;
+      fadeEnabled = false;
+      phonkEnabled = false;
+      sosStep = 0;
+      ledcWrite(LED_CHANNEL, 0);
+      previousMillis = millis();
+      Serial.println("Режим SOS включён");
+    } else if (command == '10') {
+      sosEnabled = false;
+      ledcWrite(LED_CHANNEL, 0);
+      Serial.println("Режим SOS выключен");
     }
   }
 
@@ -107,6 +126,35 @@ void loop() {
       if (phonkStep >= 9) {
         phonkStep = 0;
       }
+    }
+  }
+
+  if (sosEnabled) {
+    unsigned long currentMillis = millis();
+    unsigned long interval;
+
+    if (sosStep >= 18) {
+      interval = sosPauseInterval;
+      if (currentMillis - previousMillis >= interval) {
+        previousMillis = currentMillis;
+        sosStep = 0;
+      }
+      return;
+    } 
+
+    if (sosStep % 2 == 0) {
+      interval = (sosStep / 6 == 1) ? longBlinkInterval : blinkInterval;
+      ledState = true;
+    } else {
+      interval = blinkInterval;
+      ledState = false;
+    }
+
+    if (currentMillis - previousMillis >= interval) {
+      previousMillis = currentMillis;
+
+      ledcWrite(LED_CHANNEL, ledState ? 255 : 0);
+      sosStep++;
     }
   }
 }
