@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private boolean stripBlinkState = true;
     private boolean fadeEffectState = true;
+    private boolean phonkEffectState = true;
+    private boolean sosEffect = true;
     private Button activeButton = null;
 
     private final ActivityResultLauncher<String[]> permissionsLauncher =
@@ -166,7 +168,15 @@ public class MainActivity extends AppCompatActivity
                             fadeEffectState = true;
                             toggleFadeEffect();
                             Toast.makeText(bottomSheetDialog.getContext(), "Fade-эффект включен", Toast.LENGTH_SHORT).show();
-                        } else {
+                        } else if(buttonId == R.id.button3) {
+                            phonkEffectState = true;
+                            togglePhonk();
+                            Toast.makeText(bottomSheetDialog.getContext(), "Phonk-effect включен", Toast.LENGTH_SHORT).show();
+                        } else if(buttonId == R.id.button4) {
+                            sosEffect = true;
+                            toggleSoS();
+                            Toast.makeText(bottomSheetDialog.getContext(), "SOS включен", Toast.LENGTH_SHORT).show();
+                        }  else {
                             Toast.makeText(bottomSheetDialog.getContext(), "Нажата кнопка с ID: " + buttonId, Toast.LENGTH_SHORT).show();
                         }
                     } else {
@@ -180,6 +190,14 @@ public class MainActivity extends AppCompatActivity
                             fadeEffectState = false;
                             toggleFadeEffect();
                             Toast.makeText(bottomSheetDialog.getContext(), "Fade-эффект выключен", Toast.LENGTH_SHORT).show();
+                        } else if (buttonId == R.id.button3) {
+                            phonkEffectState = false;
+                            togglePhonk();
+                            Toast.makeText(bottomSheetDialog.getContext(), "Phonk-effect выключен", Toast.LENGTH_SHORT).show();
+                        } else if(buttonId == R.id.button4) {
+                            sosEffect = true;
+                            toggleSoS();
+                            Toast.makeText(bottomSheetDialog.getContext(), "SOS выключен", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -330,6 +348,64 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         } else {
+            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void togglePhonk()
+    {
+        if (mOutputStream != null)
+        {
+            try
+            {
+                if (phonkEffectState)
+                {
+                    mOutputStream.write('7');
+                    Toast.makeText(this, "Включено phonk", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    mOutputStream.write('8');
+                    Toast.makeText(this, "Выключено phonk", Toast.LENGTH_SHORT).show();
+                }
+                phonkEffectState = !phonkEffectState;
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void toggleSoS()
+    {
+        if (mOutputStream != null)
+        {
+            try
+            {
+                if (sosEffect)
+                {
+                    mOutputStream.write('9');
+                    Toast.makeText(this, "Включено SOS", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    mOutputStream.write("10".getBytes("UTF-8"));
+                    Toast.makeText(this, "Выключено SOS", Toast.LENGTH_SHORT).show();
+                }
+                sosEffect = !sosEffect;
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
             Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
         }
     }
