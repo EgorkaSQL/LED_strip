@@ -10,10 +10,14 @@ BluetoothSerial SerialBT;
 
 bool blinkEnabled = false;
 bool fadeEnabled = false;
+bool phonkEnabled = false;
 
 unsigned long previousMillis = 0;
 const unsigned long blinkInterval = 200;
+const unsigned long longBlinkInterval = 500;
 bool ledState = false;
+
+int phonkStep = 0;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -52,6 +56,18 @@ void loop() {
       fadeEnabled = false;
       ledcWrite(LED_CHANNEL, 0);
       Serial.println("Затухание выключено");
+    } else if (command == '7') {
+      phonkEnabled = true;
+      blinkEnabled = false;
+      fadeEnabled = false;
+      phonkStep = 0;
+      ledState = false;
+      previousMillis = millis();
+      Serial.println("Фонк включено");
+    } else if (command == '8') {
+      phonkEnabled = false;
+      ledcWrite(LED_CHANNEL, 0);
+      Serial.println("Фонк выключено");
     }
   }
 
@@ -72,6 +88,25 @@ void loop() {
     for (int brightness = 255; brightness >= 0; brightness--) {
       ledcWrite(LED_CHANNEL, brightness);
       delay(10);
+    }
+  }
+
+  if (phonkEnabled) {
+    unsigned long currentMillis = millis();
+    unsigned long interval = (phonkStep < 3) ? longBlinkInterval : blinkInterval;
+
+    if (currentMillis - previousMillis >= interval) {
+      previousMillis = currentMillis;
+      ledState = !ledState;
+      ledcWrite(LED_CHANNEL, ledState ? 255 : 0);
+
+      if (!ledState) {
+        phonkStep++;
+      }
+
+      if (phonkStep >= 9) {
+        phonkStep = 0;
+      }
     }
   }
 }
