@@ -65,7 +65,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Romantic"
+            android:text="Simple"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button6"
@@ -73,7 +73,55 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Night light"
+            android:text="Вечером будет"
+            android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Вечером будет"
+            android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Вечером будет"
+            android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Вечером будет"
+            android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/button10"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Вечером будет"
+            android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/button11"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Вечером будет"
+            android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/button12"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_toggle_selector"
+            android:text="Вечером будет"
             android:textColor="#FFFFFF"/>
     </GridLayout>
 

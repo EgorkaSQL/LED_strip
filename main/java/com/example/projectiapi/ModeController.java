@@ -14,6 +14,7 @@ public class ModeController {
     private boolean fadeEffectState = false;
     private boolean phonkEffectState = false;
     private boolean sosEffectState = false;
+    private boolean colorCycleState = false;
 
     public ModeController(Context context, OutputStream outputStream) {
         this.context = context;
@@ -88,6 +89,25 @@ public class ModeController {
                     showToast("SOS включён");
                 }
                 sosEffectState = !sosEffectState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void toggleColorCycle() {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('D');
+                    showToast("Режим смены цветов выключен");
+                } else {
+                    outputStream.write('C');
+                    showToast("Режим смены цветов включён");
+                }
+                colorCycleState = !colorCycleState;
             } catch (IOException e) {
                 e.printStackTrace();
             }

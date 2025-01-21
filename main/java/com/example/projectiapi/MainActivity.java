@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
-        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4};
+        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5};
         for (int buttonId : buttonIds) {
             Button button = bottomSheetView.findViewById(buttonId);
             if (button != null) {
@@ -170,6 +170,8 @@ public class MainActivity extends AppCompatActivity
                 modeController.togglePhonkEffect();
             } else if (buttonId == R.id.button4) {
                 modeController.toggleSoS();
+            } else if (buttonId == R.id.button5) {
+                modeController.toggleColorCycle();
             }
         } else {
             Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
