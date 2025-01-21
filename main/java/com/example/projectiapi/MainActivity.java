@@ -41,11 +41,8 @@ public class MainActivity extends AppCompatActivity
     private Button btnAudioListener;
     private boolean ledState = false;
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private boolean stripBlinkState = true;
-    private boolean fadeEffectState = true;
-    private boolean phonkEffectState = true;
-    private boolean sosEffect = true;
     private Button activeButton = null;
+    private ModeController modeController;
 
     private final ActivityResultLauncher<String[]> permissionsLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
@@ -142,71 +139,43 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
-        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6};
-        for (int i = 0; i < buttonIds.length; i++) {
-            Button button = bottomSheetView.findViewById(buttonIds[i]);
+        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4};
+        for (int buttonId : buttonIds) {
+            Button button = bottomSheetView.findViewById(buttonId);
             if (button != null) {
-                final int buttonId = buttonIds[i];
-
-                button.setOnClickListener(v -> {
-                    if (activeButton != null && activeButton != button) {
-                        Toast.makeText(bottomSheetDialog.getContext(), "Сначала отключите активную кнопку!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    boolean isActivated = button.isSelected();
-                    button.setSelected(!isActivated);
-
-                    if (!isActivated) {
-                        activeButton = button;
-
-                        if (buttonId == R.id.button1) {
-                            stripBlinkState = true;
-                            toggleStripBlink();
-                            Toast.makeText(bottomSheetDialog.getContext(), "Мигание включено", Toast.LENGTH_SHORT).show();
-                        } else if (buttonId == R.id.button2) {
-                            fadeEffectState = true;
-                            toggleFadeEffect();
-                            Toast.makeText(bottomSheetDialog.getContext(), "Fade-эффект включен", Toast.LENGTH_SHORT).show();
-                        } else if(buttonId == R.id.button3) {
-                            phonkEffectState = true;
-                            togglePhonk();
-                            Toast.makeText(bottomSheetDialog.getContext(), "Phonk-effect включен", Toast.LENGTH_SHORT).show();
-                        } else if(buttonId == R.id.button4) {
-                            sosEffect = true;
-                            toggleSoS();
-                            Toast.makeText(bottomSheetDialog.getContext(), "SOS включен", Toast.LENGTH_SHORT).show();
-                        }  else {
-                            Toast.makeText(bottomSheetDialog.getContext(), "Нажата кнопка с ID: " + buttonId, Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        activeButton = null;
-
-                        if (buttonId == R.id.button1) {
-                            stripBlinkState = false;
-                            toggleStripBlink();
-                            Toast.makeText(bottomSheetDialog.getContext(), "Мигание выключено", Toast.LENGTH_SHORT).show();
-                        } else if (buttonId == R.id.button2) {
-                            fadeEffectState = false;
-                            toggleFadeEffect();
-                            Toast.makeText(bottomSheetDialog.getContext(), "Fade-эффект выключен", Toast.LENGTH_SHORT).show();
-                        } else if (buttonId == R.id.button3) {
-                            phonkEffectState = false;
-                            togglePhonk();
-                            Toast.makeText(bottomSheetDialog.getContext(), "Phonk-effect выключен", Toast.LENGTH_SHORT).show();
-                        } else if(buttonId == R.id.button4) {
-                            sosEffect = true;
-                            toggleSoS();
-                            Toast.makeText(bottomSheetDialog.getContext(), "SOS выключен", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                button.setOnClickListener(v -> handleButtonPress(buttonId, button, bottomSheetDialog));
             }
         }
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.setCanceledOnTouchOutside(false);
         bottomSheetDialog.show();
+    }
+
+    private void handleButtonPress(int buttonId, Button button, BottomSheetDialog dialog) {
+        if (activeButton != null && activeButton != button) {
+            Toast.makeText(dialog.getContext(), "Сначала отключите активную кнопку!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        boolean isActivated = button.isSelected();
+        button.setSelected(!isActivated);
+
+        if (modeController != null) {
+            if (buttonId == R.id.button1) {
+                modeController.toggleStripBlink();
+            } else if (buttonId == R.id.button2) {
+                modeController.toggleFadeEffect();
+            } else if (buttonId == R.id.button3) {
+                modeController.togglePhonkEffect();
+            } else if (buttonId == R.id.button4) {
+                modeController.toggleSoS();
+            }
+        } else {
+            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
+        }
+
+        activeButton = isActivated ? null : button;
     }
 
     private void animateButtonsIn()
@@ -261,27 +230,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void connectToBluetoothDevice()
-    {
+    private void connectToBluetoothDevice() {
         String deviceAddress = "C0:5D:89:DC:BC:06";
         mDevice = mBluetoothAdapter.getRemoteDevice(deviceAddress);
 
-        try
-        {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
-            {
+        try {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                 mSocket = mDevice.createRfcommSocketToServiceRecord(MY_UUID);
                 mSocket.connect();
                 mOutputStream = mSocket.getOutputStream();
+
+                modeController = new ModeController(this, mOutputStream);
                 Toast.makeText(this, "Подключено к устройству", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
+            } else {
                 Toast.makeText(this, "Нет разрешения на подключение к устройствам Bluetooth", Toast.LENGTH_SHORT).show();
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             Toast.makeText(this, "Не удалось подключиться к устройству", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
@@ -300,112 +264,6 @@ public class MainActivity extends AppCompatActivity
             }
             ledState = !ledState;
         } else {
-            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void toggleStripBlink()
-    {
-        if (mOutputStream != null)
-        {
-            try
-            {
-                if (stripBlinkState)
-                {
-                    mOutputStream.write('3');
-                    Toast.makeText(this, "Включено мигание", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    mOutputStream.write('4');
-                    Toast.makeText(this, "Выключено мигание", Toast.LENGTH_SHORT).show();
-                }
-                stripBlinkState = !stripBlinkState;
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void toggleFadeEffect() {
-        if (mOutputStream != null) {
-            try {
-                if (fadeEffectState) {
-                    mOutputStream.write('5');
-                    Toast.makeText(this, "Эффект затухания включён", Toast.LENGTH_SHORT).show();
-                } else {
-                    mOutputStream.write('6');
-                    Toast.makeText(this, "Эффект затухания выключен", Toast.LENGTH_SHORT).show();
-                }
-                fadeEffectState = !fadeEffectState;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void togglePhonk()
-    {
-        if (mOutputStream != null)
-        {
-            try
-            {
-                if (phonkEffectState)
-                {
-                    mOutputStream.write('7');
-                    Toast.makeText(this, "Включено phonk", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    mOutputStream.write('8');
-                    Toast.makeText(this, "Выключено phonk", Toast.LENGTH_SHORT).show();
-                }
-                phonkEffectState = !phonkEffectState;
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void toggleSoS()
-    {
-        if (mOutputStream != null)
-        {
-            try
-            {
-                if (sosEffect)
-                {
-                    mOutputStream.write('9');
-                    Toast.makeText(this, "Включено SOS", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    mOutputStream.write("10".getBytes("UTF-8"));
-                    Toast.makeText(this, "Выключено SOS", Toast.LENGTH_SHORT).show();
-                }
-                sosEffect = !sosEffect;
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
             Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
         }
     }
