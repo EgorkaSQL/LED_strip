@@ -43,6 +43,25 @@ void loop() {
     Serial.print("Получено: ");
     Serial.println(command);
 
+    if (command == 'B') {
+      String brightnessValue = "";
+      while (SerialBT.available()) {
+        char ch = SerialBT.read();
+        if (isDigit(ch)) {
+          brightnessValue += ch;
+        } else {
+          break;
+        }
+      }
+
+      int brightness = brightnessValue.toInt();
+      brightness = constrain(brightness, 0, 255);
+
+      ledcWrite(LED_CHANNEL, brightness);
+      Serial.print("Яркость изменена на: ");
+      Serial.println(brightness);
+    }
+
     if (command == '3') {
       blinkEnabled = true;
       fadeEnabled = false;
