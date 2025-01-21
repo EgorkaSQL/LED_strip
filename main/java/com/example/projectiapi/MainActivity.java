@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import android.animation.ObjectAnimator;
@@ -377,6 +378,33 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+
+        SeekBar brightnessSlider = bottomSheetDialog.findViewById(R.id.brightnessSlider);
+
+        if (brightnessSlider != null) {
+            brightnessSlider.setMax(255);
+            brightnessSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (mOutputStream != null) {
+                        try {
+                            String brightnessCommand = "B" + progress;
+                            mOutputStream.write(brightnessCommand.getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) { }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) { }
+            });
+        }
 
         bottomSheetDialog.show();
     }
