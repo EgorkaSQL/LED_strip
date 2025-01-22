@@ -151,6 +151,11 @@ public class MainActivity extends AppCompatActivity
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.setCanceledOnTouchOutside(false);
+
+        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+        behavior.setDraggable(false);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
         bottomSheetDialog.show();
     }
 
