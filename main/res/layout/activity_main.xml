@@ -35,7 +35,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        />
 
     <ImageButton
         android:id="@+id/btnToggleLED"
@@ -81,7 +82,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/btn_menu_selector"
-            android:text="Меню"
+            android:text="Цвета"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
 

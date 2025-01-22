@@ -397,8 +397,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(), "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
                     }
                 }
-                
-                //НЕ ЗАБЫТЬ РЕАЛИЗОВАТЬ СОХРАНЕНИЕ ПОЛЗУНКА ПОСЛЕ ОКОНЧАНИЯ ВЗАИМОДЕЙСТВИЯ С НИМ!!!!!!!!!!!!!!!!!!!!
+
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) { }
 

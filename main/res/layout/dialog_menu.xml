@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_dialog">
 
-    <!-- Центрированная кнопка -->
     <Button
         android:id="@+id/topButton"
         android:layout_width="60dp"
@@ -16,12 +15,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Слайдер яркости -->
+    <TextView
+        android:id="@+id/versionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Яркость"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/brightnessSlider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <SeekBar
         android:id="@+id/brightnessSlider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="50dp"
         android:max="100"
         android:progress="100"
         android:thumbTint="@color/seekbar_thumb"
@@ -31,18 +40,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
-    <!-- Круглый цветовой выбор -->
     <com.example.projectiapi.ColorPickerView
         android:id="@+id/colorPickerCircle"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintTop_toBottomOf="@id/brightnessSlider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Индикатор цвета -->
     <View
         android:id="@+id/colorIndicator"
         android:layout_width="20dp"
