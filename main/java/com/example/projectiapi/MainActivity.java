@@ -4,6 +4,7 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -400,9 +401,12 @@ public class MainActivity extends AppCompatActivity
         });
 
         SeekBar brightnessSlider = bottomSheetDialog.findViewById(R.id.brightnessSlider);
+        SharedPreferences preferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
+        int savedBrightness = preferences.getInt("saved_brightness", 128);
 
         if (brightnessSlider != null) {
             brightnessSlider.setMax(255);
+            brightnessSlider.setProgress(savedBrightness);
             brightnessSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -422,7 +426,11 @@ public class MainActivity extends AppCompatActivity
                 public void onStartTrackingTouch(SeekBar seekBar) { }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("saved_brightness", seekBar.getProgress());
+                    editor.apply();
+                }
             });
         }
 
