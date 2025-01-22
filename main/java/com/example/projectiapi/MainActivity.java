@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -126,7 +124,6 @@ public class MainActivity extends AppCompatActivity
 
         animateButtonsIn();
     }
-
 
     private void showBottomSheet() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
@@ -352,63 +349,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-        final View colorPicker = bottomSheetDialog.findViewById(R.id.colorPickerCircle);
-        final View colorIndicator = bottomSheetDialog.findViewById(R.id.colorIndicator);
-        if (colorPicker == null || colorIndicator == null) return;
-
-        colorPicker.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
-        {
-            @Override
-            public void onGlobalLayout()
-            {
-                colorPicker.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                int pickerWidth = colorPicker.getWidth();
-                int pickerHeight = colorPicker.getHeight();
-                int indicatorWidth = colorIndicator.getWidth();
-                int indicatorHeight = colorIndicator.getHeight();
-
-                colorIndicator.setX(colorPicker.getX() + pickerWidth / 2f - indicatorWidth / 2f);
-                colorIndicator.setY(colorPicker.getY() + pickerHeight / 2f - indicatorHeight / 2f);
-            }
-        });
-
-        colorPicker.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                float touchX = event.getX();
-                float touchY = event.getY();
-                int pickerWidth = colorPicker.getWidth();
-                int pickerHeight = colorPicker.getHeight();
-                int indicatorWidth = colorIndicator.getWidth();
-                int indicatorHeight = colorIndicator.getHeight();
-                float pickerX = colorPicker.getX();
-                float pickerY = colorPicker.getY();
-                float centerX = pickerX + pickerWidth / 2f;
-                float centerY = pickerY + pickerHeight / 2f;
-                float radius = pickerWidth / 2f;
-                float dx = touchX - pickerWidth / 2f;
-                float dy = touchY - pickerHeight / 2f;
-                float distance = (float) Math.sqrt(dx * dx + dy * dy);
-
-                if (distance > radius)
-                {
-                    float ratio = radius / distance;
-                    dx *= ratio;
-                    dy *= ratio;
-                }
-
-                float newX = centerX + dx - indicatorWidth / 2f;
-                float newY = centerY + dy - indicatorHeight / 2f;
-                colorIndicator.setX(newX);
-                colorIndicator.setY(newY);
-
-                return true;
-            }
-        });
 
         SeekBar brightnessSlider = bottomSheetDialog.findViewById(R.id.brightnessSlider);
         SharedPreferences preferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);

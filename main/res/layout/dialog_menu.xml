@@ -40,24 +40,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.example.projectiapi.ColorPickerView
-        android:id="@+id/colorPickerCircle"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="50dp"
+    <Button
+        android:id="@+id/buttonBlue"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/btn_toggle_selector"
+        android:fontFamily="sans-serif"
+        android:text="Blue"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/brightnessSlider"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@+id/buttonRed"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintWidth_percent="0.3"/>
 
-    <View
-        android:id="@+id/colorIndicator"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/indicator_circle"
-        app:layout_constraintTop_toBottomOf="@id/colorPickerCircle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+    <Button
+        android:id="@+id/buttonRed"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/btn_toggle_selector"
+        android:text="Red"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/brightnessSlider"
+        app:layout_constraintStart_toEndOf="@id/buttonBlue"
+        app:layout_constraintEnd_toStartOf="@+id/buttonGreen"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintWidth_percent="0.3"/>
 
-
+    <Button
+        android:id="@+id/buttonGreen"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/btn_toggle_selector"
+        android:text="Green"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/brightnessSlider"
+        app:layout_constraintStart_toEndOf="@id/buttonRed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintWidth_percent="0.3"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

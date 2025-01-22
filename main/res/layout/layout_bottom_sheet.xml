@@ -33,7 +33,7 @@
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
             android:fontFamily="sans-serif"
-            android:text="Blink White"
+            android:text="Blink"
             android:textColor="#FFFFFF" />
         <Button
             android:id="@+id/button2"
@@ -41,7 +41,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Fade White"
+            android:text="Fade"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button3"
