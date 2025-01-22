@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private Button activeButton = null;
     private ModeController modeController;
+    private MenuDialog menuDialog;
 
     private final ActivityResultLauncher<String[]> permissionsLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
@@ -119,8 +120,14 @@ public class MainActivity extends AppCompatActivity
         btnAudioListener = findViewById(R.id.btnAudioListener);
         btnAudioListener.setOnClickListener(v -> showBottomSheet());
 
+        menuDialog = new MenuDialog(this, null);
+
         Button btnMenu = findViewById(R.id.btnDummy1);
-        btnMenu.setOnClickListener(v -> showMenuDialog());
+        btnMenu.setOnClickListener(v -> {
+            if (menuDialog != null) {
+                menuDialog.showMenuDialog();
+            }
+        });
 
         animateButtonsIn();
     }
@@ -270,6 +277,7 @@ public class MainActivity extends AppCompatActivity
                 mSocket = mDevice.createRfcommSocketToServiceRecord(MY_UUID);
                 mSocket.connect();
                 mOutputStream = mSocket.getOutputStream();
+                menuDialog.setOutputStream(mOutputStream);
 
                 modeController = new ModeController(this, mOutputStream);
                 Toast.makeText(this, "Подключено к устройству", Toast.LENGTH_SHORT).show();
@@ -313,78 +321,6 @@ public class MainActivity extends AppCompatActivity
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(lightEffect, "alpha", 1f, 0f);
         fadeOut.setDuration(300);
         fadeOut.start();
-    }
-
-    private void showMenuDialog()
-    {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-        bottomSheetDialog.setContentView(R.layout.dialog_menu);
-        bottomSheetDialog.setCanceledOnTouchOutside(false);
-        Button btnCloseMenu = bottomSheetDialog.findViewById(R.id.topButton);
-
-        if (btnCloseMenu != null)
-        {
-            btnCloseMenu.setOnClickListener(v -> {
-                if (bottomSheetDialog.isShowing())
-                {
-                    bottomSheetDialog.dismiss();
-                }
-            });
-        }
-
-        BottomSheetBehavior<?> behavior = bottomSheetDialog.getBehavior();
-        behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
-        {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState)
-            {
-                if (newState == BottomSheetBehavior.STATE_DRAGGING)
-                {
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {}
-        });
-
-        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-        SeekBar brightnessSlider = bottomSheetDialog.findViewById(R.id.brightnessSlider);
-        SharedPreferences preferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
-        int savedBrightness = preferences.getInt("saved_brightness", 128);
-
-        if (brightnessSlider != null) {
-            brightnessSlider.setMax(255);
-            brightnessSlider.setProgress(savedBrightness);
-            brightnessSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (mOutputStream != null) {
-                        try {
-                            String brightnessCommand = "B" + progress;
-                            mOutputStream.write(brightnessCommand.getBytes());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("saved_brightness", seekBar.getProgress());
-                    editor.apply();
-                }
-            });
-        }
-
-        bottomSheetDialog.show();
     }
 
     @Override
