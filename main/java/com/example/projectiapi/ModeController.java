@@ -82,7 +82,7 @@ public class ModeController {
         if (outputStream != null) {
             try {
                 if (sosEffectState) {
-                    outputStream.write("10".getBytes("UTF-8"));
+                    outputStream.write('W');
                     showToast("SOS выключен");
                 } else {
                     outputStream.write('9');
@@ -106,6 +106,146 @@ public class ModeController {
                 } else {
                     outputStream.write('C');
                     showToast("Режим смены цветов включён");
+                }
+                colorCycleState = !colorCycleState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void toogleStrobe()
+    {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('A');
+                    showToast("Режим Strobe выключен");
+                } else {
+                    outputStream.write('S');
+                    showToast("Режим Strobe включён");
+                }
+                colorCycleState = !colorCycleState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void toogleColdWinter()
+    {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('F');
+                    showToast("Режим Cold Winter выключен");
+                } else {
+                    outputStream.write('G');
+                    showToast("Режим Cold Winter включён");
+                }
+                colorCycleState = !colorCycleState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void toogleRomantic()
+    {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('H');
+                    showToast("Режим Romantic выключен");
+                } else {
+                    outputStream.write('J');
+                    showToast("Режим Romantic включён");
+                }
+                colorCycleState = !colorCycleState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void toogleRelax()
+    {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('K');
+                    showToast("Режим Relax выключен");
+                } else {
+                    outputStream.write('L');
+                    showToast("Режим Relax включён");
+                }
+                colorCycleState = !colorCycleState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void tooglePhonk2()
+    {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('P');
+                    showToast("Режим Phonk 2 выключен");
+                } else {
+                    outputStream.write('O');
+                    showToast("Режим Phonk 2 включён");
+                }
+                colorCycleState = !colorCycleState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void toogleEvening()
+    {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('I');
+                    showToast("Режим Evening выключен");
+                } else {
+                    outputStream.write('U');
+                    showToast("Режим Evening включён");
+                }
+                colorCycleState = !colorCycleState;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showToast("Bluetooth не подключен");
+        }
+    }
+
+    public void tooglePolice()
+    {
+        if (outputStream != null) {
+            try {
+                if (colorCycleState) {
+                    outputStream.write('Y');
+                    showToast("Режим Police выключен");
+                } else {
+                    outputStream.write('T');
+                    showToast("Режим Police включён");
                 }
                 colorCycleState = !colorCycleState;
             } catch (IOException e) {

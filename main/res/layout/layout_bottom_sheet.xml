@@ -33,7 +33,7 @@
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
             android:fontFamily="sans-serif"
-            android:text="Blink"
+            android:text="Blink White"
             android:textColor="#FFFFFF" />
         <Button
             android:id="@+id/button2"
@@ -41,7 +41,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Fade"
+            android:text="Fade White"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button3"
@@ -65,7 +65,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Simple"
+            android:text="Flash"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button6"
@@ -73,7 +73,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Вечером будет"
+            android:text="Strobe"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button7"
@@ -81,7 +81,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Вечером будет"
+            android:text="Cold Winter"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button8"
@@ -89,7 +89,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Вечером будет"
+            android:text="Romantic"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button9"
@@ -97,7 +97,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Вечером будет"
+            android:text="Relax"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button10"
@@ -105,7 +105,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Вечером будет"
+            android:text="Phonk 2"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button11"
@@ -113,7 +113,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Вечером будет"
+            android:text="Evening"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button12"
@@ -121,7 +121,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Вечером будет"
+            android:text="Police"
             android:textColor="#FFFFFF"/>
     </GridLayout>
 

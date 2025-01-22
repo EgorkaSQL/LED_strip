@@ -140,7 +140,8 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
-        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5};
+        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6,
+                R.id.button7, R.id.button8, R.id.button9, R.id.button10, R.id.button11, R.id.button12};
         for (int buttonId : buttonIds) {
             Button button = bottomSheetView.findViewById(buttonId);
             if (button != null) {
@@ -173,6 +174,20 @@ public class MainActivity extends AppCompatActivity
                 modeController.toggleSoS();
             } else if (buttonId == R.id.button5) {
                 modeController.toggleColorCycle();
+            } else if (buttonId == R.id.button6) {
+                modeController.toogleStrobe();
+            } else if (buttonId == R.id.button7) {
+                modeController.toogleColdWinter();
+            } else if (buttonId == R.id.button8) {
+                modeController.toogleRomantic();
+            } else if (buttonId == R.id.button9) {
+                modeController.toogleRelax();
+            } else if (buttonId == R.id.button10) {
+                modeController.tooglePhonk2();
+            } else if (buttonId == R.id.button11) {
+                modeController.toogleEvening();
+            } else if (buttonId == R.id.button12) {
+                modeController.tooglePolice();
             }
         } else {
             Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();

@@ -102,7 +102,7 @@ void loop() {
       ledcWrite(LED_CHANNEL, 0);
       previousMillis = millis();
       Serial.println("Режим SOS включён");
-    } else if (command == '10') {
+    } else if (command == 'W') {
       sosEnabled = false;
       ledcWrite(LED_CHANNEL, 0);
       Serial.println("Режим SOS выключен");
