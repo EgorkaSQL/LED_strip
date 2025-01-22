@@ -143,9 +143,12 @@ public class MainActivity extends AppCompatActivity
 
         int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6,
                 R.id.button7, R.id.button8, R.id.button9, R.id.button10, R.id.button11, R.id.button12};
+        SharedPreferences preferences = getSharedPreferences("ButtonStates", MODE_PRIVATE);
         for (int buttonId : buttonIds) {
             Button button = bottomSheetView.findViewById(buttonId);
             if (button != null) {
+                boolean isActivated = preferences.getBoolean("buttonState" + buttonId, false);
+                button.setSelected(isActivated);
                 button.setOnClickListener(v -> handleButtonPress(buttonId, button, bottomSheetDialog));
             }
         }
@@ -161,6 +164,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void handleButtonPress(int buttonId, Button button, BottomSheetDialog dialog) {
+        SharedPreferences preferences = getSharedPreferences("ButtonStates", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
         if (activeButton != null && activeButton != button) {
             Toast.makeText(dialog.getContext(), "Сначала отключите активную кнопку!", Toast.LENGTH_SHORT).show();
             return;
@@ -168,6 +174,10 @@ public class MainActivity extends AppCompatActivity
 
         boolean isActivated = button.isSelected();
         button.setSelected(!isActivated);
+
+        boolean isNowActivated = !isActivated;
+        editor.putBoolean("buttonState" + buttonId, isNowActivated);
+        editor.apply();
 
         if (modeController != null) {
             if (buttonId == R.id.button1) {
