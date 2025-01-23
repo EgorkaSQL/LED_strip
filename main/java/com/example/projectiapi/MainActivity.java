@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 import android.animation.ObjectAnimator;
@@ -293,18 +292,14 @@ public class MainActivity extends AppCompatActivity
     private void toggleLED() {
         ImageButton btnToggleLED = findViewById(R.id.btnToggleLED);
 
-        if (mOutputStream != null) {
-            if (ledState) {
-                fadeInLightEffect();
-                btnToggleLED.setImageResource(R.drawable.ic_led_off);
-            } else {
-                fadeOutLightEffect();
-                btnToggleLED.setImageResource(R.drawable.ic_led_on);
-            }
-            ledState = !ledState;
+        if (ledState) {
+            fadeInLightEffect();
+            btnToggleLED.setImageResource(R.drawable.ic_led_off);
         } else {
-            Toast.makeText(this, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();
+            fadeOutLightEffect();
+            btnToggleLED.setImageResource(R.drawable.ic_led_on);
         }
+        ledState = !ledState;
     }
 
     private void fadeInLightEffect()
