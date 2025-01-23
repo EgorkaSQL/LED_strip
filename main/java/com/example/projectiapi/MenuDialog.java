@@ -80,10 +80,16 @@ public class MenuDialog {
         Button buttonRed = dialogView.findViewById(R.id.buttonRed);
         Button buttonBlue = dialogView.findViewById(R.id.buttonBlue);
         Button buttonGreen = dialogView.findViewById(R.id.buttonGreen);
+        Button buttonBlueAndRed = dialogView.findViewById(R.id.buttonBlueAndRed);
+        Button buttonGreenAndBlue = dialogView.findViewById(R.id.buttonGreenAndBlue);
+        Button buttonGreenAndRed = dialogView.findViewById(R.id.buttonGreenAndRed);
 
         setupColorButton(buttonRed, "buttonRed", "Z", "X");
         setupColorButton(buttonBlue, "buttonBlue", "M", "E");
         setupColorButton(buttonGreen, "buttonGreen", "Q", "N");
+        setupColorButton(buttonBlueAndRed, "buttonBlueAndRed", "O", "R");
+        setupColorButton(buttonGreenAndBlue, "buttonGreenAndBlue", "2", "V");
+        setupColorButton(buttonGreenAndRed, "buttonGreenAndRed", "b", "a");
 
         BottomSheetBehavior<?> behavior = bottomSheetDialog.getBehavior();
         behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {

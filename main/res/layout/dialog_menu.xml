@@ -82,4 +82,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintWidth_percent="0.3"/>
+
+    <Button
+        android:id="@+id/buttonBlueAndRed"
+        android:layout_marginTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/btn_toogle_selector_blue_and_red"
+        android:contentDescription="Blue and Red"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/buttonBlue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonRed"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintWidth_percent="0.3"/>
+
+    <Button
+        android:id="@+id/buttonGreenAndBlue"
+        android:layout_marginTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/btn_toogle_selector_blue_and_green"
+        android:contentDescription="Blue and Green"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/buttonBlue"
+        app:layout_constraintStart_toEndOf="@id/buttonBlueAndRed"
+        app:layout_constraintEnd_toStartOf="@id/buttonGreenAndRed"
+        app:layout_constraintWidth_percent="0.3"/>
+
+    <Button
+        android:id="@+id/buttonGreenAndRed"
+        android:layout_marginTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/btn_toogle_selector_red_and_green"
+        android:contentDescription="Green and Red"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/buttonRed"
+        app:layout_constraintStart_toEndOf="@id/buttonGreenAndBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.3"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
