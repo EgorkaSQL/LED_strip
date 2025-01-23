@@ -17,6 +17,7 @@ import java.io.OutputStream;
 public class MenuDialog {
     private final Activity activity;
     private OutputStream outputStream;
+    private Button activeButton = null;
 
     public MenuDialog(Activity activity, OutputStream outputStream) {
         this.activity = activity;
@@ -80,9 +81,9 @@ public class MenuDialog {
         Button buttonBlue = dialogView.findViewById(R.id.buttonBlue);
         Button buttonGreen = dialogView.findViewById(R.id.buttonGreen);
 
-        setupColorButton(buttonRed, "Z", "X");
-        setupColorButton(buttonBlue, "M", "E");
-        setupColorButton(buttonGreen, "Q", "N");
+        setupColorButton(buttonRed, "buttonRed", "Z", "X");
+        setupColorButton(buttonBlue, "buttonBlue", "M", "E");
+        setupColorButton(buttonGreen, "buttonGreen", "Q", "N");
 
         BottomSheetBehavior<?> behavior = bottomSheetDialog.getBehavior();
         behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -103,17 +104,41 @@ public class MenuDialog {
         bottomSheetDialog.show();
     }
 
-    private void setupColorButton(Button button, String onCommand, String offCommand) {
+    private void setupColorButton(Button button, String preferenceKey, String onCommand, String offCommand) {
+        SharedPreferences preferences = activity.getSharedPreferences("MyAppPreferences", Activity.MODE_PRIVATE);
+        boolean isActivated = preferences.getBoolean(preferenceKey, false);
+        button.setSelected(isActivated);
+
+        if (isActivated) {
+            activeButton = button;
+        }
+
         button.setOnClickListener(v -> {
-            boolean isActivated = button.isSelected();
-            button.setSelected(!isActivated);
+            if (activeButton != null && activeButton != button) {
+                Toast.makeText(activity, "Сначала отключите активную кнопку!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            boolean currentState = button.isSelected();
+            button.setSelected(!currentState);
+
+            if (!currentState) {
+                activeButton = button;
+            } else {
+                activeButton = null;
+            }
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(preferenceKey, !currentState);
+            editor.apply();
 
             if (outputStream != null) {
                 try {
-                    String command = isActivated ? offCommand : onCommand;
+                    String command = currentState ? offCommand : onCommand;
                     outputStream.write(command.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(activity, "Ошибка отправки данных", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(activity, "Bluetooth не подключен", Toast.LENGTH_SHORT).show();

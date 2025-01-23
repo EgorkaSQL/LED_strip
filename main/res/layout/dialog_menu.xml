@@ -42,11 +42,12 @@
 
     <Button
         android:id="@+id/buttonBlue"
+        android:layout_marginTop="20dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/btn_toggle_selector"
+        android:background="@drawable/btn_toogle_selector_blue"
         android:fontFamily="sans-serif"
-        android:text="Blue"
+        android:contentDescription="Blue"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/brightnessSlider"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,10 +57,11 @@
 
     <Button
         android:id="@+id/buttonRed"
+        android:layout_marginTop="20dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/btn_toggle_selector"
-        android:text="Red"
+        android:background="@drawable/btn_toogle_selector_red"
+        android:contentDescription="Red"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/brightnessSlider"
         app:layout_constraintStart_toEndOf="@id/buttonBlue"
@@ -69,10 +71,11 @@
 
     <Button
         android:id="@+id/buttonGreen"
+        android:layout_marginTop="20dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/btn_toggle_selector"
-        android:text="Green"
+        android:background="@drawable/btn_toogle_selector_green"
+        android:contentDescription="Green"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/brightnessSlider"
         app:layout_constraintStart_toEndOf="@id/buttonRed"
