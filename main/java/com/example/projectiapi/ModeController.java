@@ -136,7 +136,7 @@ public class ModeController {
         }
     }
 
-    public void toogleColdWinter()
+    public void toogleCold()
     {
         if (outputStream != null) {
             try {
@@ -196,7 +196,7 @@ public class ModeController {
         }
     }
 
-    public void tooglePhonk2()
+    public void toogleChill()
     {
         if (outputStream != null) {
             try {
@@ -216,7 +216,7 @@ public class ModeController {
         }
     }
 
-    public void toogleEvening()
+    public void toogleEpileptics()
     {
         if (outputStream != null) {
             try {

@@ -196,15 +196,15 @@ public class MainActivity extends AppCompatActivity
             } else if (buttonId == R.id.button6) {
                 modeController.toogleStrobe();
             } else if (buttonId == R.id.button7) {
-                modeController.toogleColdWinter();
+                modeController.toogleCold();
             } else if (buttonId == R.id.button8) {
                 modeController.toogleRomantic();
             } else if (buttonId == R.id.button9) {
                 modeController.toogleRelax();
             } else if (buttonId == R.id.button10) {
-                modeController.tooglePhonk2();
+                modeController.toogleChill();
             } else if (buttonId == R.id.button11) {
-                modeController.toogleEvening();
+                modeController.toogleEpileptics();
             } else if (buttonId == R.id.button12) {
                 modeController.tooglePolice();
             }
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void connectToBluetoothDevice() {
-        String deviceAddress = "C0:5D:89:DC:BC:06";
+        String deviceAddress = "CC:7B:5C:36:05:AE";
         mDevice = mBluetoothAdapter.getRemoteDevice(deviceAddress);
 
         try {
