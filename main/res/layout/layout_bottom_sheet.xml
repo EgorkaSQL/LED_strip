@@ -81,7 +81,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Cold Winter"
+            android:text="Cold"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button8"
@@ -105,7 +105,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Phonk 2"
+            android:text="CHILL"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button11"
@@ -113,7 +113,7 @@
             android:layout_height="80dp"
             android:layout_margin="8dp"
             android:background="@drawable/btn_toggle_selector"
-            android:text="Evening"
+            android:text="Epileptics"
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/button12"
