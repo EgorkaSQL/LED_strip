@@ -204,7 +204,7 @@ public class ModeController {
                     outputStream.write('P');
                     showToast("Режим Phonk 2 выключен");
                 } else {
-                    outputStream.write('O');
+                    outputStream.write('1');
                     showToast("Режим Phonk 2 включён");
                 }
                 colorCycleState = !colorCycleState;
