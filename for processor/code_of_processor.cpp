@@ -9,6 +9,16 @@ BluetoothSerial SerialBT;
 bool isBlinking = false;
 bool isFading = false;
 bool isPhonk = false;
+bool isSOS = false;
+bool isFlash = false;
+bool isStrobe = false;
+bool isCold = false;
+bool isRomantic = false;
+bool isRelax = false;
+bool isChill = false;
+bool isEpileptics = false;
+bool isPolice = false;
+
 int fadeDirection = 1;
 int brightness = 0;
 const int fadeSpeed = 5;
@@ -183,6 +193,124 @@ void loop() {
       isPhonk = false;
       resetPins();
     }
+
+    // SOS
+    if (command == '9') 
+    {
+      Serial.println("Включен SOS");
+      isSOS = true;
+    }
+    if (command == 'W') 
+    {
+      Serial.println("Выключен SOS");
+      isSOS = false;
+      resetPins();
+    }
+
+    // Flash
+    if (command == 'C')
+    {
+      Serial.println("Включен Flash");
+      isFlash = true;
+    }
+    if (command == 'D')
+    {
+      Serial.println("Выключен Flash");
+      isFlash = false;
+      resetPins();
+    }
+
+    // Strobe
+    if (command == 'S')
+    {
+      Serial.println("Включен Strobe");
+      isStrobe = true;
+    }
+    if (command == 'A')
+    {
+      Serial.println("Выключен Strobe");
+      isStrobe = false;
+      resetPins();
+    }
+
+    // Cold
+    if (command == 'G')
+    {
+      Serial.println("Включен Cold");
+      isCold = true;
+      brightness = 0;
+    }
+    if (command == 'F')
+    {
+      Serial.println("Выключен Cold");
+      isCold = false;
+      resetPins();
+    }
+
+    // Romantic
+    if (command == 'J')
+    {
+      Serial.println("Включен Romantic");
+      isRomantic = true;
+    }
+    if (command == 'H')
+    {
+      Serial.println("Выключен Romantic");
+      isRomantic = false;
+      resetPins();
+    }
+
+    // Relax
+    if (command == 'L')
+    {
+      Serial.println("Включен Relax");
+      isRelax = true;
+    }
+    if (command == 'K')
+    {
+      Serial.println("Выключен Relax");
+      isRelax = false;
+      resetPins();
+    }
+
+    // Chill
+    if (command == '1')
+    {
+      Serial.println("Включен Chill");
+      isChill = true;
+    }
+    if (command == 'P')
+    {
+      Serial.println("Выключен Chill");
+      isChill = false;
+      resetPins();
+    }
+
+    // Epileptics
+    if (command == 'U')
+    {
+      Serial.println("Включен Epileptics");
+      isEpileptics = true;
+    }
+    if (command == 'I')
+    {
+      Serial.println("Выключен Epileptics");
+      isEpileptics = false;
+      resetPins();
+    }
+
+    // Police
+    if (command == 'T')
+    {
+      Serial.println("Включен Police");
+      isPolice = true;
+    }
+    if (command == 'Y')
+    {
+      Serial.println("Выключен Police");
+      isPolice = false;
+      resetPins();
+    }
   }
 
   if (isBlinking) 
@@ -291,5 +419,244 @@ void loop() {
           break;
       }
     }
+  }
+
+  if (isSOS) 
+  {
+    for (int i = 0; i < 3; i++) 
+    {
+      pinMode(PIN_R, OUTPUT);
+      pinMode(PIN_G, OUTPUT);
+      pinMode(PIN_B, OUTPUT);
+      delay(200);
+
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+      delay(200);
+    }
+    delay(600);
+
+    for (int i = 0; i < 3; i++) 
+    {
+      pinMode(PIN_R, OUTPUT);
+      pinMode(PIN_G, OUTPUT);
+      pinMode(PIN_B, OUTPUT);
+      delay(600);
+
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+      delay(200);
+    }
+    delay(600);
+
+    for (int i = 0; i < 3; i++) 
+    {
+      pinMode(PIN_R, OUTPUT);
+      pinMode(PIN_G, OUTPUT);
+      pinMode(PIN_B, OUTPUT);
+      delay(200);
+
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+      delay(200);
+    }
+
+    delay(2000);
+  }
+
+  if (isFlash)
+  {
+    pinMode(PIN_R, OUTPUT);
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_B, INPUT);
+    delay(1000);
+
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_R, INPUT);
+    pinMode(PIN_B, OUTPUT);
+    delay(1000);
+
+    pinMode(PIN_R, INPUT);
+    pinMode(PIN_B, INPUT);
+    pinMode(PIN_G, OUTPUT);
+    delay(1000);
+  }
+
+  if (isStrobe)
+  {
+      for (int i = 0; i < 10; i++)
+      {
+          pinMode(PIN_R, OUTPUT);  
+          pinMode(PIN_G, OUTPUT);  
+          pinMode(PIN_B, OUTPUT);  
+
+          digitalWrite(PIN_R, HIGH);
+          digitalWrite(PIN_G, HIGH);
+          digitalWrite(PIN_B, HIGH);
+
+          delay(50);
+
+          digitalWrite(PIN_R, LOW);
+          digitalWrite(PIN_G, LOW);
+          digitalWrite(PIN_B, LOW);
+
+          delay(50);
+      }
+      resetPins();
+  }
+
+  if (isCold)
+  {
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_R, INPUT);
+    analogWrite(PIN_B, brightness);
+
+    brightness += fadeDirection * fadeSpeed;
+
+    if (brightness <= 0 || brightness >= 255) 
+    {
+      fadeDirection = -fadeDirection;
+    }
+
+    delay(30);
+  }
+
+  if (isRomantic)
+  {
+    pinMode(PIN_R, INPUT);
+    pinMode(PIN_B, INPUT);
+    pinMode(PIN_G, INPUT);
+
+    delay(500);
+    for (int i = 0; i < 2; i++) 
+    {
+      pinMode(PIN_R, OUTPUT);
+      pinMode(PIN_G, OUTPUT);
+      pinMode(PIN_B, OUTPUT);
+      delay(200);
+
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+    }
+  }
+
+  if (isRelax)
+  {
+      for (int i = 0; i <= 255; i++)
+      {
+          analogWrite(PIN_G, 255 - i);
+          analogWrite(PIN_B, i);
+          delay(10);
+      }
+
+      for (int i = 0; i <= 255; i++)
+      {
+          analogWrite(PIN_B, 255 - i);
+          analogWrite(PIN_R, i);
+          delay(10);
+      }
+
+      for (int i = 0; i <= 255; i++)
+      {
+          analogWrite(PIN_R, 255 - i);
+          analogWrite(PIN_G, i);
+          delay(10);
+      }
+  }
+
+  if (isChill)
+  {
+    for (int i = 0; i < 3; i++) 
+    {
+      pinMode(PIN_R, OUTPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+      delay(300);
+
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+      delay(300);
+    }
+
+    for (int i = 0; i < 3; i++) 
+    {
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, OUTPUT);
+      pinMode(PIN_B, OUTPUT);
+      delay(300);
+
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+      delay(200);
+    }
+
+    for (int i = 0; i < 3; i++) 
+    {
+      pinMode(PIN_R, OUTPUT);
+      pinMode(PIN_G, OUTPUT);
+      pinMode(PIN_B, OUTPUT);
+      delay(300);
+
+      pinMode(PIN_R, INPUT);
+      pinMode(PIN_G, INPUT);
+      pinMode(PIN_B, INPUT);
+      delay(200);
+    }
+
+    pinMode(PIN_R, OUTPUT);
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_B, INPUT);
+
+    delay(400);
+
+    pinMode(PIN_R, OUTPUT);
+    pinMode(PIN_G, OUTPUT);
+    pinMode(PIN_B, INPUT);
+
+    delay(400);
+
+    pinMode(PIN_R, OUTPUT);
+    pinMode(PIN_G, OUTPUT);
+    pinMode(PIN_B, OUTPUT);
+  }
+
+  if (isEpileptics)
+  {
+    pinMode(PIN_B, OUTPUT);
+    pinMode(PIN_G, OUTPUT);
+    pinMode(PIN_R, OUTPUT);
+    delay(150);
+
+    digitalWrite(PIN_R, LOW);
+    digitalWrite(PIN_G, LOW);
+    digitalWrite(PIN_B, LOW);
+    pinMode(PIN_B, INPUT);
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_R, INPUT);
+    delay(150);
+  }
+
+  if (isPolice)
+  {
+    pinMode(PIN_R, INPUT);
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_B, OUTPUT);
+    
+    delay(200);
+
+    digitalWrite(PIN_R, LOW);
+    digitalWrite(PIN_G, LOW);
+    digitalWrite(PIN_B, LOW);
+    pinMode(PIN_R, OUTPUT);
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_B, INPUT);
+
+    delay(200);
   }
 }
