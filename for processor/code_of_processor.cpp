@@ -3,6 +3,11 @@
 #define PIN_R 14
 #define PIN_G 26
 #define PIN_B 33
+#define LED_CHANNEL_R 0
+#define LED_CHANNEL_G 1
+#define LED_CHANNEL_B 2 
+#define LED_RESOLUTION 8
+#define LED_FREQ 5000
 
 BluetoothSerial SerialBT;
 
@@ -43,6 +48,13 @@ void resetPins()
   pinMode(PIN_B, OUTPUT);
 }
 
+void turnOnColor(int r, int g, int b) 
+{
+  ledcWrite(LED_CHANNEL_R, r);
+  ledcWrite(LED_CHANNEL_G, g);
+  ledcWrite(LED_CHANNEL_B, b);
+}
+
 void setup() 
 { 
   pinMode(PIN_R, OUTPUT); 
@@ -57,10 +69,33 @@ void setup()
   Serial.println("Bluetooth initialized");
 }
 
-void loop() {
+void loop() 
+{
   if (SerialBT.available()) 
   {
     char command = SerialBT.read();
+
+    if (command == 'B') 
+    {
+      String brightnessValue = "";
+      while (SerialBT.available()) 
+      {
+        char ch = SerialBT.read();
+        if (isDigit(ch)) 
+        {
+          brightnessValue += ch;
+        }
+        else
+        {
+          break;
+        }
+      }
+
+      int brightness = brightnessValue.toInt();
+      brightness = constrain(brightness, 0, 255);
+
+      turnOnColor(brightness, brightness, brightness);
+    }
 
     // Синий цвет
     if (command == 'M')
@@ -487,25 +522,18 @@ void loop() {
 
   if (isStrobe)
   {
-      for (int i = 0; i < 10; i++)
-      {
-          pinMode(PIN_R, OUTPUT);  
-          pinMode(PIN_G, OUTPUT);  
-          pinMode(PIN_B, OUTPUT);  
+    pinMode(PIN_B, OUTPUT);
+    pinMode(PIN_G, OUTPUT);
+    pinMode(PIN_R, OUTPUT);
+    delay(150);
 
-          digitalWrite(PIN_R, HIGH);
-          digitalWrite(PIN_G, HIGH);
-          digitalWrite(PIN_B, HIGH);
-
-          delay(50);
-
-          digitalWrite(PIN_R, LOW);
-          digitalWrite(PIN_G, LOW);
-          digitalWrite(PIN_B, LOW);
-
-          delay(50);
-      }
-      resetPins();
+    digitalWrite(PIN_R, LOW);
+    digitalWrite(PIN_G, LOW);
+    digitalWrite(PIN_B, LOW);
+    pinMode(PIN_B, INPUT);
+    pinMode(PIN_G, INPUT);
+    pinMode(PIN_R, INPUT);
+    delay(150);
   }
 
   if (isCold)
@@ -628,18 +656,25 @@ void loop() {
 
   if (isEpileptics)
   {
-    pinMode(PIN_B, OUTPUT);
-    pinMode(PIN_G, OUTPUT);
-    pinMode(PIN_R, OUTPUT);
-    delay(150);
+    for (int i = 0; i < 10; i++)
+      {
+          pinMode(PIN_R, OUTPUT);  
+          pinMode(PIN_G, OUTPUT);  
+          pinMode(PIN_B, OUTPUT);  
 
-    digitalWrite(PIN_R, LOW);
-    digitalWrite(PIN_G, LOW);
-    digitalWrite(PIN_B, LOW);
-    pinMode(PIN_B, INPUT);
-    pinMode(PIN_G, INPUT);
-    pinMode(PIN_R, INPUT);
-    delay(150);
+          digitalWrite(PIN_R, HIGH);
+          digitalWrite(PIN_G, HIGH);
+          digitalWrite(PIN_B, HIGH);
+
+          delay(50);
+
+          digitalWrite(PIN_R, LOW);
+          digitalWrite(PIN_G, LOW);
+          digitalWrite(PIN_B, LOW);
+
+          delay(50);
+      }
+      resetPins();
   }
 
   if (isPolice)
