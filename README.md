@@ -1,5 +1,5 @@
 ## Это проект посвященный светодиодной ленте управляемой через мобильное устройство Andriod. ##
-## В проекте присутствует как код для самого приложения, так и код для контроллера ESP32-Wroom. ##
+### В проекте присутствует как код для самого приложения, так и код для контроллера ESP32-Wroom. ###
 
 + Код для процессора - https://github.com/EgorkaSQL/LED_strip/blob/main/for%20processor/code_of_processor.cpp
 + Документация процессора - https://github.com/EgorkaSQL/LED_strip/blob/main/for%20processor/Documentation_processor.md
