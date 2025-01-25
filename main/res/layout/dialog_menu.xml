@@ -19,7 +19,7 @@
         android:id="@+id/versionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Яркость"
+        android:text="Цвета"
         android:textSize="20sp"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@id/brightnessSlider"
