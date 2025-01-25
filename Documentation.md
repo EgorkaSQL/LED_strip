@@ -5,7 +5,7 @@
 + Документация - https://github.com/EgorkaSQL/LED_strip/blob/main/for%20processor/Documentation_processor.md
 
 + Код для приложения - https://github.com/EgorkaSQL/LED_strip/tree/main/main\
-+ Документация лежит в той же директории\
++ Документация лежит в той же директории
 + Основные изменения происходят в res/drawable, res/layout, java/com/example/projectiapi
 
 Приложение можно скачать в корневой директории - ./app-debug.apk
