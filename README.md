@@ -4,7 +4,7 @@
 + Код для процессора - https://github.com/EgorkaSQL/LED_strip/blob/main/for%20processor/code_of_processor.cpp
 + Документация процессора - https://github.com/EgorkaSQL/LED_strip/blob/main/for%20processor/Documentation_processor.md
 + Код для приложения - https://github.com/EgorkaSQL/LED_strip/tree/main/main
-+ Документация приложение - https://github.com/EgorkaSQL/LED_strip/blob/main/main/Docemuntation_app.md
++ Документация приложение - https://github.com/EgorkaSQL/LED_strip/blob/main/main/Documentation_app.md
 + Основные изменения происходят в res/drawable, res/layout, java/com/example/projectiapi
   
 Приложение можно скачать в корневой директории - ./app-debug.apk
